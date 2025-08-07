@@ -39,8 +39,8 @@ def upload_image_to_runpod(
     # Create output directory
     os.makedirs(output_dir, exist_ok=True)
     
-    # Construct RunPod URL
-    base_url = f"https://{pod_id}-8001.proxy.runpod.net"
+    # Construct RunPod URL (pod_id should include the port, e.g., "nly46gfine5irt-8002")
+    base_url = f"https://{pod_id}.proxy.runpod.net"
     parse_url = f"{base_url}/parse"
     
     print(f"🚀 Uploading {image_path} to RunPod...")
@@ -138,8 +138,8 @@ def upload_pdf_to_runpod(
     # Create output directory
     os.makedirs(output_dir, exist_ok=True)
     
-    # Construct RunPod URL
-    base_url = f"https://{pod_id}-8001.proxy.runpod.net"
+    # Construct RunPod URL (pod_id should include the port)
+    base_url = f"https://{pod_id}.proxy.runpod.net"
     parse_url = f"{base_url}/parse_pdf"
     
     print(f"🚀 Uploading {pdf_path} to RunPod...")
@@ -228,7 +228,7 @@ def upload_pdf_to_runpod(
 def check_runpod_health(pod_id: str) -> bool:
     """Check if the RunPod service is healthy."""
     
-    base_url = f"https://{pod_id}-8001.proxy.runpod.net"
+    base_url = f"https://{pod_id}.proxy.runpod.net"
     health_url = f"{base_url}/health"
     
     print(f"🔍 Checking RunPod health: {health_url}")

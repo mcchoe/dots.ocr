@@ -123,7 +123,7 @@ async def parse_document(
             
             # Post-process the response to get layout JSON
             from dots_ocr.utils.layout_utils import post_process_output
-            layout_data = post_process_output(response, prompt_mode)
+            layout_data = post_process_output(response, prompt_mode, image, image)
             
             # Convert to markdown formats
             markdown_regular = ""
