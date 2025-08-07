@@ -45,12 +45,15 @@ source .venv/bin/activate
 echo "📦 Installing PyTorch with uv pip..."
 uv pip install torch==2.7.0 torchvision==0.22.0 torchaudio==2.7.0 --index-url https://download.pytorch.org/whl/cu128
 
-# Install all other dependencies with uv pip (after PyTorch is available)
-echo "📦 Installing other dependencies with uv pip..."
+# Install flash-attn first with no build isolation (needs PyTorch)
+echo "📦 Installing flash-attn..."
+uv pip install flash-attn==2.8.0.post2 --no-build-isolation
+
+# Install other dependencies with uv pip
+echo "📦 Installing remaining dependencies..."
 uv pip install \
     transformers==4.51.3 \
     accelerate \
-    flash-attn==2.8.0.post2 \
     vllm==0.9.1 \
     PyMuPDF \
     qwen_vl_utils \
