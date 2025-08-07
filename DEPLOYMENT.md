@@ -24,8 +24,7 @@ This guide explains how to deploy dots.ocr on RunPod using uv for dependency man
    cd dots.ocr
    
    # Make setup script executable and run
-   chmod +x runpod_setup.sh
-   ./runpod_setup.sh
+   chmod +x runpod_setup.sh && ./runpod_setup.sh
    ```
 
 3. **The script will:**

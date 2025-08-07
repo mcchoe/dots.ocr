@@ -33,13 +33,21 @@ else
     git pull
 fi
 
-# Install dependencies with uv
-echo "📦 Installing Python dependencies with uv..."
-uv sync --extra demo
+# Create virtual environment with uv
+echo "🔧 Creating virtual environment with uv..."
+uv venv --python 3.12
 
 # Activate virtual environment
 echo "🔧 Activating virtual environment..."
 source .venv/bin/activate
+
+# Install PyTorch with pip (CUDA support)
+echo "📦 Installing PyTorch with uv pip..."
+uv pip install torch==2.7.0 torchvision==0.22.0 torchaudio==2.7.0 --index-url https://download.pytorch.org/whl/cu128
+
+# Install other dependencies with uv
+echo "📦 Installing other dependencies with uv..."
+uv sync
 
 # Download model weights
 echo "⬇️ Downloading model weights..."

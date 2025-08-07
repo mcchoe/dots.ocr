@@ -24,10 +24,7 @@ classifiers = [
 ]
 
 dependencies = [
-    # Core ML dependencies
-    "torch>=2.7.0",
-    "torchvision>=0.22.0", 
-    "torchaudio>=2.7.0",
+    # Core ML dependencies (PyTorch installed separately with pip)
     "transformers==4.51.3",
     "accelerate",
     "flash-attn==2.8.0.post2",
@@ -80,15 +77,8 @@ Homepage = "https://github.com/rednote-hilab/dots.ocr"
 Repository = "https://github.com/rednote-hilab/dots.ocr"
 
 [tool.uv]
-# Use PyTorch CUDA index for GPU support
-index-url = "https://download.pytorch.org/whl/cu128"
-extra-index-url = ["https://pypi.org/simple"]
-
-[tool.uv.sources]
-# Ensure PyTorch comes from CUDA index
-torch = { index = "https://download.pytorch.org/whl/cu128" }
-torchvision = { index = "https://download.pytorch.org/whl/cu128" }
-torchaudio = { index = "https://download.pytorch.org/whl/cu128" }
+# Default PyPI index
+index-url = "https://pypi.org/simple"
 
 [tool.hatchling.build.targets.wheel]
 packages = ["dots_ocr"]
