@@ -139,10 +139,10 @@ start_vllm_server() {
 
 # Function to start FastAPI server
 start_fastapi_server() {
-    echo "🚀 Starting FastAPI server on port 8001..."
+    echo "🚀 Starting FastAPI server on port 8002..."
     
-    # Start FastAPI server in background
-    python3 api_server.py --host 0.0.0.0 --port 8001 \
+    # Start FastAPI server in background (use 8002 since nginx uses 8001)
+    python3 api_server.py --host 0.0.0.0 --port 8002 \
         > /workspace/logs/fastapi.log 2>&1 &
     
     FASTAPI_PID=$!
@@ -151,7 +151,7 @@ start_fastapi_server() {
     # Wait for FastAPI server to be ready
     echo "⏳ Waiting for FastAPI server to be ready..."
     for i in {1..30}; do
-        if curl -s http://localhost:8001/health > /dev/null 2>&1; then
+        if curl -s http://localhost:8002/health > /dev/null 2>&1; then
             echo "✅ FastAPI server is ready!"
             break
         fi
@@ -159,7 +159,7 @@ start_fastapi_server() {
         sleep 2
     done
     
-    if ! curl -s http://localhost:8001/health > /dev/null 2>&1; then
+    if ! curl -s http://localhost:8002/health > /dev/null 2>&1; then
         echo "❌ FastAPI server failed to start. Check logs:"
         tail -50 /workspace/logs/fastapi.log
         exit 1
@@ -190,12 +190,12 @@ echo "🎉 dots.ocr deployment complete!"
 echo ""
 echo "📊 Service Status:"
 echo "  vLLM server:    http://localhost:8000 (PID: $VLLM_PID)"
-echo "  FastAPI server: http://localhost:8001 (PID: $FASTAPI_PID)"
+echo "  FastAPI server: http://localhost:8002 (PID: $FASTAPI_PID)"
 echo ""
 echo "🌐 RunPod Access URLs (replace POD_ID with your actual pod ID):"
-echo "  FastAPI Docs:   https://POD_ID-8001.proxy.runpod.net/docs"
-echo "  Parse Endpoint: https://POD_ID-8001.proxy.runpod.net/parse"
-echo "  Health Check:   https://POD_ID-8001.proxy.runpod.net/health"
+echo "  FastAPI Docs:   https://POD_ID-8002.proxy.runpod.net/docs"
+echo "  Parse Endpoint: https://POD_ID-8002.proxy.runpod.net/parse"
+echo "  Health Check:   https://POD_ID-8002.proxy.runpod.net/health"
 echo ""
 echo "📝 Log Files:"
 echo "  vLLM logs:      tail -f /workspace/logs/vllm.log"
