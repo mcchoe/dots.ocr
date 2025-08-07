@@ -45,9 +45,13 @@ source .venv/bin/activate
 echo "📦 Installing PyTorch with uv pip..."
 uv pip install torch==2.7.0 torchvision==0.22.0 torchaudio==2.7.0 --index-url https://download.pytorch.org/whl/cu128
 
-# Install other dependencies with uv
+# Install flash-attn separately (needs PyTorch available)
+echo "📦 Installing flash-attn..."
+uv pip install flash-attn==2.8.0.post2 --no-build-isolation
+
+# Install other dependencies with uv (excluding flash-attn which we just installed)
 echo "📦 Installing other dependencies with uv..."
-uv sync
+uv sync --no-dev
 
 # Download model weights
 echo "⬇️ Downloading model weights..."
