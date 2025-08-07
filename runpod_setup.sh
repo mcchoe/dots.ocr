@@ -42,16 +42,12 @@ echo "🔧 Activating virtual environment..."
 source .venv/bin/activate
 
 # Install PyTorch with pip (CUDA support)
-echo "📦 Installing PyTorch with uv pip..."
-uv pip install torch==2.7.0 torchvision==0.22.0 torchaudio==2.7.0 --index-url https://download.pytorch.org/whl/cu128
+echo "📦 Installing PyTorch with pip..."
+pip install torch==2.7.0 torchvision==0.22.0 torchaudio==2.7.0 --index-url https://download.pytorch.org/whl/cu128
 
-# Install flash-attn first with no build isolation (needs PyTorch)
-echo "📦 Installing flash-attn..."
-uv pip install flash-attn==2.8.0.post2 --no-build-isolation
-
-# Install other dependencies with uv pip
-echo "📦 Installing remaining dependencies..."
-uv pip install \
+# Install other dependencies with pip (faster than uv)
+echo "📦 Installing other dependencies with pip..."
+pip install \
     transformers==4.51.3 \
     accelerate \
     vllm==0.9.1 \
@@ -71,9 +67,13 @@ uv pip install \
     gradio \
     gradio_image_annotation
 
+# Install flash-attn last (needs PyTorch available)
+echo "📦 Installing flash-attn..."
+pip install flash-attn==2.8.0.post2 --no-build-isolation
+
 # Download model weights
 echo "⬇️ Downloading model weights..."
-python3 tools/download_model.py --type modelscope
+python3 tools/download_model.py
 
 # Verify model directory structure
 echo "🔍 Verifying model directory..."
