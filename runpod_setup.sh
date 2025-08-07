@@ -14,10 +14,9 @@ apt-get update && apt-get install -y curl git wget
 # Install uv package manager
 echo "📦 Installing uv package manager..."
 curl -LsSf https://astral.sh/uv/install.sh | sh
-source $HOME/.cargo/env
 
-# Add uv to PATH for current session
-export PATH="$HOME/.cargo/bin:$PATH"
+# Add uv to PATH for current session (uv installs to ~/.local/bin)
+export PATH="$HOME/.local/bin:$PATH"
 
 # Verify uv installation
 echo "✅ uv version: $(uv --version)"

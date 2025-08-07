@@ -20,7 +20,7 @@ This guide explains how to deploy dots.ocr on RunPod using uv for dependency man
    ```bash
    # Upload files to RunPod or clone your repo
    cd /workspace
-   git clone <your-repo-url>
+   git clone https://github.com/mcchoe/dots.ocr.git
    cd dots.ocr
    
    # Make setup script executable and run
