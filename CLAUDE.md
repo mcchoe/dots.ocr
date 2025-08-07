@@ -139,3 +139,44 @@ The system supports different parsing modes controlled by prompts:
 - **Input**: Images up to 11,289,600 pixels, PDF DPI 200 recommended
 - **Languages**: Supports 100+ languages including low-resource languages
 - **Categories**: 11 layout categories (Caption, Footnote, Formula, List-item, Page-footer, Page-header, Picture, Section-header, Table, Text, Title)
+
+## RunPod Deployment
+
+### FastAPI Production Service
+
+The repository includes production-ready deployment scripts for RunPod:
+
+- **`api_server.py`**: FastAPI service with `/parse` endpoint that returns only markdown output
+- **`runpod_setup.sh`**: Automated deployment script for RunPod GPU pods
+- **`client.py`**: Local client with timing and health check capabilities
+
+### RunPod-Specific Considerations
+
+1. **Port Configuration**: 
+   - vLLM server: Port 8000
+   - FastAPI server: Port 8002 (Port 8001 reserved by RunPod's nginx)
+   - HTTP Ports setting: `8000,8002`
+
+2. **Dependency Management**:
+   - Use system Python (no virtual environment needed with RunPod PyTorch template)
+   - Install PyTorch first, then other dependencies, then flash-attn last
+   - Use pip for all installations (faster than uv on RunPod)
+
+3. **Model Integration**:
+   - Uses original `DotsOCRParser._parse_single_image()` method for full compatibility
+   - Proper image preprocessing and markdown conversion pipeline
+   - Returns both regular and no-headers-footers markdown versions
+
+### Quick RunPod Deployment
+
+```bash
+# Clone repository
+git clone https://github.com/mcchoe/dots.ocr.git
+cd dots.ocr
+
+# Deploy (takes ~5 minutes)
+chmod +x runpod_setup.sh && ./runpod_setup.sh
+
+# Test from local machine
+python client.py POD_ID-8002 /path/to/image.jpg
+```

@@ -19,28 +19,25 @@ This guide explains how to deploy dots.ocr on RunPod using uv for dependency man
 2. **Upload and Run Setup Script**
    ```bash
    # Upload files to RunPod or clone your repo
-   cd /workspace
-   git clone https://github.com/mcchoe/dots.ocr.git
-   cd dots.ocr
+   cd /workspace && git clone https://github.com/mcchoe/dots.ocr.git
    
    # Make setup script executable and run
-   chmod +x runpod_setup.sh && ./runpod_setup.sh
+   cd dots.ocr && chmod +x runpod_setup.sh && ./runpod_setup.sh
+   
    ```
 
 3. **The script will:**
-   - Install uv package manager
-   - Create Python 3.12 virtual environment with uv
    - Install PyTorch 2.7.0 with CUDA 12.8 support
    - Install dots.ocr and dependencies
    - Download DotsOCR model weights (1.7B parameters)
    - Register model with vLLM 0.9.1
    - Start vLLM server on port 8000
-   - Start FastAPI server on port 8001
+   - Start FastAPI server on port 8002
    - Monitor both services
 
 ## API Endpoints
 
-### FastAPI Service (Port 8001)
+### FastAPI Service (Port 8002)
 
 - **Health Check:** `GET /health`
 - **Parse Image:** `POST /parse`
@@ -63,21 +60,21 @@ This guide explains how to deploy dots.ocr on RunPod using uv for dependency man
 Use the provided client script to test your deployment:
 
 ```bash
-# Install requests if not already installed
-pip install requests
 
 # Health check
-python client.py POD_ID --health-check-only
+uv run client.py POD_ID-8002 --health-check-only
 
 # Parse an image
-python client.py POD_ID demo/demo_image1.jpg
+uv run client.py POD_ID-8002 demo/demo_image1.jpg
+
+# e.g. uv run client.py 1pmacuj5javwvu-8002 /Users/mcchoe/Documents/ocr_test/test10.png
 
 # Parse a PDF with custom settings
-python client.py POD_ID document.pdf --prompt-mode prompt_ocr --dpi 300 --output-dir results/
+uv run client.py POD_ID-8002 document.pdf --prompt-mode prompt_ocr --dpi 300 --output-dir results/
 
 # Different prompt modes
-python client.py POD_ID image.jpg --prompt-mode prompt_layout_only_en  # Layout detection only
-python client.py POD_ID image.jpg --prompt-mode prompt_ocr             # Text extraction only
+python client.py POD_ID-8002 image.jpg --prompt-mode prompt_layout_only_en  # Layout detection only
+python client.py POD_ID-8002 image.jpg --prompt-mode prompt_ocr             # Text extraction only
 ```
 
 ## Output Files
@@ -100,7 +97,7 @@ tail -f /workspace/logs/fastapi.log
 
 # Check if services are running
 curl http://localhost:8000/health  # vLLM server
-curl http://localhost:8001/health  # FastAPI server
+curl http://localhost:8002/health  # FastAPI server
 ```
 
 ### Common Issues
@@ -130,5 +127,3 @@ Key versions used:
 - FastAPI + Uvicorn
 - Transformers 4.51.3
 - Flash Attention 2.8.0.post2
-
-The setup uses uv for dependency management but follows the official installation guide structure.

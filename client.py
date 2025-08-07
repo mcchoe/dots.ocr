@@ -8,6 +8,7 @@ import os
 import sys
 import argparse
 import requests
+import time
 from pathlib import Path
 from typing import Optional
 
@@ -48,10 +49,15 @@ def upload_image_to_runpod(
     print(f"🔧 Prompt mode: {prompt_mode}")
     
     try:
+        # Start timing
+        start_time = time.time()
+        
         # Prepare files and data for upload
         with open(image_path, 'rb') as f:
             files = {'file': (os.path.basename(image_path), f, 'image/png')}
             data = {'prompt_mode': prompt_mode}
+            
+            print(f"⏰ Request started at: {time.strftime('%H:%M:%S')}")
             
             # Make request with extended timeout for RunPod
             response = requests.post(
@@ -60,6 +66,10 @@ def upload_image_to_runpod(
                 data=data,
                 timeout=95  # Just under RunPod's 100-second limit
             )
+            
+        # Calculate response time
+        end_time = time.time()
+        response_time = end_time - start_time
         
         # Check response
         if response.status_code == 200:
@@ -67,6 +77,7 @@ def upload_image_to_runpod(
             
             if result.get('status') == 'success':
                 print("✅ Successfully parsed document!")
+                print(f"⏱️  Response time: {response_time:.2f} seconds")
                 
                 # Save markdown files
                 base_name = Path(image_path).stem

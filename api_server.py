@@ -117,36 +117,34 @@ async def parse_document(
             temp_path = temp_file.name
         
         try:
-            # Parse the image using existing parser logic
-            response = parser._inference_with_vllm(image, 
-                parser.get_prompt(prompt_mode, image=image))
+            # Use the proper parsing logic from DotsOCRParser
+            import os
             
-            # Post-process the response to get layout JSON
-            from dots_ocr.utils.layout_utils import post_process_output
-            layout_data = post_process_output(response, prompt_mode, image, image)
-            
-            # Convert to markdown formats
-            markdown_regular = ""
-            markdown_nohf = ""
-            
-            if layout_data and 'layout' in layout_data:
-                cells = layout_data['layout']
-                
-                # Regular markdown (with headers/footers)
-                markdown_regular = layoutjson2md(
-                    image=image, 
-                    cells=cells, 
-                    text_key='text',
-                    no_page_hf=False
+            # Create temporary directory for processing
+            with tempfile.TemporaryDirectory() as temp_dir:
+                # Use the original parser's _parse_single_image method
+                result = parser._parse_single_image(
+                    origin_image=image,
+                    prompt_mode=prompt_mode, 
+                    save_dir=temp_dir,
+                    save_name="temp_result",
+                    source="image"
                 )
                 
-                # No headers/footers markdown  
-                markdown_nohf = layoutjson2md(
-                    image=image,
-                    cells=cells, 
-                    text_key='text',
-                    no_page_hf=True
-                )
+                # Read the generated markdown files
+                markdown_regular = ""
+                markdown_nohf = ""
+                
+                md_file = os.path.join(temp_dir, "temp_result.md")
+                md_nohf_file = os.path.join(temp_dir, "temp_result_nohf.md")
+                
+                if os.path.exists(md_file):
+                    with open(md_file, 'r', encoding='utf-8') as f:
+                        markdown_regular = f.read()
+                        
+                if os.path.exists(md_nohf_file):
+                    with open(md_nohf_file, 'r', encoding='utf-8') as f:
+                        markdown_nohf = f.read()
             
             return {
                 "status": "success",
