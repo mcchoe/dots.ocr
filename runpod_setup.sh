@@ -33,17 +33,12 @@ else
     git pull
 fi
 
-# Create virtual environment with uv
-echo "🔧 Creating virtual environment with uv..."
-uv venv --python 3.12
+# Skip virtual environment - use system Python from RunPod PyTorch template
+echo "🔧 Using system Python from RunPod PyTorch template..."
 
-# Activate virtual environment
-echo "🔧 Activating virtual environment..."
-source .venv/bin/activate
-
-# Install PyTorch with pip (CUDA support)
-echo "📦 Installing PyTorch with pip..."
-pip install torch==2.7.0 torchvision==0.22.0 torchaudio==2.7.0 --index-url https://download.pytorch.org/whl/cu128
+# Upgrade PyTorch to required version (CUDA support)
+echo "📦 Upgrading PyTorch to required version..."
+pip install torch==2.7.0 torchvision==0.22.0 torchaudio==2.7.0 --index-url https://download.pytorch.org/whl/cu128 --upgrade
 
 # Install other dependencies with pip (faster than uv)
 echo "📦 Installing other dependencies with pip..."
