@@ -45,13 +45,28 @@ source .venv/bin/activate
 echo "📦 Installing PyTorch with uv pip..."
 uv pip install torch==2.7.0 torchvision==0.22.0 torchaudio==2.7.0 --index-url https://download.pytorch.org/whl/cu128
 
-# Install flash-attn separately (needs PyTorch available)
-echo "📦 Installing flash-attn..."
-uv pip install flash-attn==2.8.0.post2 --no-build-isolation
-
-# Install other dependencies with uv (excluding flash-attn which we just installed)
-echo "📦 Installing other dependencies with uv..."
-uv sync --no-dev
+# Install all other dependencies with uv pip (after PyTorch is available)
+echo "📦 Installing other dependencies with uv pip..."
+uv pip install \
+    transformers==4.51.3 \
+    accelerate \
+    flash-attn==2.8.0.post2 \
+    vllm==0.9.1 \
+    PyMuPDF \
+    qwen_vl_utils \
+    fastapi \
+    "uvicorn[standard]" \
+    python-multipart \
+    huggingface_hub \
+    modelscope \
+    openai \
+    httpx \
+    tqdm \
+    numpy \
+    pillow \
+    requests \
+    gradio \
+    gradio_image_annotation
 
 # Download model weights
 echo "⬇️ Downloading model weights..."
