@@ -15,7 +15,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 
 # Hardcoded configuration
 POD_ID = "9b569wf87rta65-8002"  # Update with your actual pod ID
-TARGET_FOLDER = "/Volumes/Storage/document/Kirkland & Ellis/M&A - PE Resources/50-50 Deals/Deadlock Resolutions in 50-50 Transactions"
+TARGET_FOLDER = "/Volumes/Storage/document/Kirkland & Ellis/M&A - PE Resources/50-50 Deals/Project Felix - Stockholders Agreement"
 OUTPUT_BASE_DIR = "./output"
 
 
